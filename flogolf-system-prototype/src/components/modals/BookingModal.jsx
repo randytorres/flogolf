@@ -580,7 +580,7 @@ export const BookingModal = ({
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
-                    <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-flomarine)' }}>
+                    <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#fff' }}>
                       Booking Summary
                     </div>
                     <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-secondary)', marginTop: '0.25rem' }}>
@@ -666,7 +666,7 @@ const Section = ({ title, step, active, onClick, children }) => (
       }}>
         {step}
       </div>
-      <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: active ? 'var(--color-flomarine)' : 'var(--color-text-muted)' }}>
+      <span style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: active ? '#fff' : 'var(--color-text-muted)' }}>
         {title}
       </span>
     </div>
@@ -772,7 +772,7 @@ const labelStyle = {
   gap: '0.375rem',
   fontSize: 'var(--text-sm)',
   fontWeight: 600,
-  color: 'var(--color-flomarine)',
+  color: '#fff',
   marginBottom: '0.375rem',
 };
 

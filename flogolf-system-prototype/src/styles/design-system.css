@@ -52,11 +52,22 @@
   
   /* Gradients */
   --gradient-marine: linear-gradient(135deg, var(--color-flomarine) 0%, var(--color-forest) 100%);
+  --gradient-primary: linear-gradient(135deg, var(--color-flomarine) 0%, var(--color-forest) 100%);
   --gradient-marine-light: linear-gradient(135deg, var(--color-forest) 0%, var(--color-forest-light) 100%);
   --gradient-gold: linear-gradient(135deg, var(--color-brass) 0%, var(--color-brass-light) 100%);
   --gradient-gold-shine: linear-gradient(135deg, var(--color-brass-light) 0%, var(--color-brass) 50%, var(--color-brass-light) 100%);
   --gradient-card: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
   --gradient-card-elevated: linear-gradient(180deg, #1e1e1e 0%, #161616 100%);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
   
   /* Layout */
   --sidebar-width: 280px;
@@ -191,8 +202,8 @@ h6 { font-size: var(--text-base); }
 .bg-brass-muted { background-color: var(--color-brass-muted); }
 
 /* Text Colors */
-.text-marine { color: var(--color-flomarine); }
-.text-forest { color: var(--color-forest); }
+.text-marine { color: #fff; }
+.text-forest { color: #fff; }
 .text-brass { color: var(--color-brass); }
 .text-brass-light { color: var(--color-brass-light); }
 .text-primary { color: var(--color-text-primary); }

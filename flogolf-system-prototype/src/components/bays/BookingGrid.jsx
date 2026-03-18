@@ -16,12 +16,33 @@ const HOURS = [
 
 export const BookingGrid = ({ baySchedule, hourlyBookings, onNewBooking }) => {
   const [hoveredSlot, setHoveredSlot] = useState(null);
-  
-  if (!hourlyBookings || !baySchedule) return null;
-  
+
+  if (!baySchedule) return null;
+
   const bayCount = baySchedule.bays.length;
   const now = new Date();
   const currentHour = now.getHours();
+
+  const parseHour = (t) => {
+    if (!t) return null;
+    const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!m) return null;
+    let h = parseInt(m[1]);
+    if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+    if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+    return h;
+  };
+
+  const parseHourEnd = (t) => {
+    if (!t) return null;
+    const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!m) return null;
+    let h = parseInt(m[1]);
+    const mins = parseInt(m[2]);
+    if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+    if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+    return mins > 0 ? h + 1 : h;
+  };
   
   const getHour24 = (label) => {
     const match = label.match(/(\d+)\s*(AM|PM)/);
@@ -85,7 +106,7 @@ export const BookingGrid = ({ baySchedule, hourlyBookings, onNewBooking }) => {
       </div>
 
       {/* Grid */}
-      <div style={{ overflowX: 'auto' }}>
+      <div className="booking-grid-scroll" style={{ overflowX: 'auto' }}>
         <div style={{ minWidth: '800px' }}>
           {/* Header Row */}
           <div style={{
@@ -180,11 +201,14 @@ export const BookingGrid = ({ baySchedule, hourlyBookings, onNewBooking }) => {
                 const hour24 = getHour24(hour);
                 const isCurrent = hour24 === currentHour;
                 const isPast = hour24 < currentHour;
-                
-                const isBooked = bay.startHour !== null && 
-                                 hour24 >= bay.startHour && 
-                                 hour24 < (bay.startHour + bay.duration);
-                const isActive = isBooked && bay.status === 'active' && isCurrent;
+
+                // Compute booking window from session data
+                const bayStartHour = bay.session ? parseHour(bay.session.startTime) : null;
+                const bayEndHour = bay.session ? parseHourEnd(bay.session.endTime) : null;
+                const isBooked = bayStartHour !== null &&
+                                 hour24 >= bayStartHour &&
+                                 hour24 < bayEndHour;
+                const isActive = isBooked && bay.status === 'active';
                 const isUpcoming = isBooked && bay.status === 'upcoming';
                 
                 const slotKey = `${bay.id}-${hour}`;

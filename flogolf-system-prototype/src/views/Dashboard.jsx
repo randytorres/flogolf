@@ -53,9 +53,43 @@ export default function Dashboard({ data, onNavigate }) {
   // Mutable state
   const [baySchedule, setBaySchedule] = useState(data.baySchedule);
   const [todayBookings, setTodayBookings] = useState(data.dashboard.todayBookings);
-  const [todayRevenue, setTodayRevenue] = useState(data.dashboard.todayRevenue);
+  const [todayRevenue, setTodayRevenue] = useState(
+    typeof data.dashboard.todayRevenue === 'string'
+      ? parseInt(data.dashboard.todayRevenue.replace(/[^0-9]/g, ''), 10)
+      : data.dashboard.todayRevenue
+  );
+  const [revenueAtRisk] = useState(
+    typeof data.dashboard.revenueAtRisk === 'string'
+      ? parseInt(data.dashboard.revenueAtRisk.replace(/[^0-9]/g, ''), 10)
+      : data.dashboard.revenueAtRisk
+  );
 
-  const { dashboard, customers, hourlyBookings, leagueStandings, locationName } = data;
+  const { dashboard, customers, leagueStandings, locationName } = data;
+
+  // Compute hourly booking counts from bay schedule for BookingGrid
+  const hourlyBookings = React.useMemo(() => {
+    if (!baySchedule?.bays) return {};
+    const counts = {};
+    baySchedule.bays.forEach(bay => {
+      const sched = bay.session;
+      if (!sched?.startTime) return;
+      const parseHour = (t) => {
+        const m = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!m) return null;
+        let h = parseInt(m[1]);
+        if (m[3].toUpperCase() === 'PM' && h !== 12) h += 12;
+        if (m[3].toUpperCase() === 'AM' && h === 12) h = 0;
+        return h;
+      };
+      const startH = parseHour(sched.startTime);
+      const endH = parseHour(sched.endTime);
+      if (startH === null || endH === null) return;
+      for (let h = startH; h < endH; h++) {
+        counts[h] = (counts[h] || 0) + 1;
+      }
+    });
+    return counts;
+  }, [baySchedule]);
 
   // Action items from customers needing attention
   const actionItems = customers.filter(c => 
@@ -117,10 +151,7 @@ export default function Dashboard({ data, onNavigate }) {
 
     // Update stats
     setTodayBookings(prev => prev + 1);
-    setTodayRevenue(prev => {
-      const num = parseInt(prev.replace(/[$,]/g, ''));
-      return `$${(num + (booking.price || 0)).toLocaleString()}`;
-    });
+    setTodayRevenue(prev => prev + (booking.price || 0));
 
     // Push activity
     const customer = customers.find(c => c.id === booking.customerId);
@@ -206,30 +237,53 @@ export default function Dashboard({ data, onNavigate }) {
   }, [customers]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+    <div className="dash" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
       <style>{`
+        /* Dashboard-only responsive styles */
+        @media (max-width: 1440px) {
+          .dash .bay-grid-responsive {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 1199px) {
+          .dash .bay-grid-responsive {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 1023px) {
+          .dash .bay-grid-responsive {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
         @media (max-width: 768px) {
-          .dash-header-row {
+          .dash .dash-header-row {
             flex-direction: column !important;
             gap: 1rem !important;
           }
-          .dash-header-row > div:last-child {
+          .dash .dash-header-row > div:last-child {
             width: 100% !important;
             display: flex !important;
             gap: 0.5rem !important;
           }
-          .dash-header-row > div:last-child button {
+          .dash .dash-header-row > div:last-child button {
             flex: 1 !important;
           }
-          .dash-two-col {
+          .dash .bay-grid-responsive {
             grid-template-columns: 1fr !important;
           }
-          .dash-action-grid {
-            grid-template-columns: 1fr !important;
+          .dash .bay-mini-stats {
+            grid-template-columns: repeat(2, 1fr) !important;
+          }
+          .dash .bay-card-meta {
+            display: none !important;
+          }
+          .dash .bay-card-header {
+            flex-wrap: wrap;
+            gap: 0.5rem !important;
           }
         }
         @media (max-width: 480px) {
-          .dash-header-row > div:last-child {
+          .dash .dash-header-row > div:last-child {
             flex-direction: column !important;
           }
         }
@@ -287,6 +341,7 @@ export default function Dashboard({ data, onNavigate }) {
         <StatCard
           title="Today's Revenue"
           value={todayRevenue}
+          valuePrefix="$"
           trend="+8%"
           trendDirection="up"
           subtitle="vs $5,020 last week"
@@ -306,8 +361,9 @@ export default function Dashboard({ data, onNavigate }) {
         />
         <StatCard
           title="Occupancy Rate"
-          value={`${Math.round((baySchedule?.bays.filter(b => b.status === 'active').length / baySchedule?.bays.length) * 100) || 0}%`}
-          subtitle={`Peak at ${dashboard.peakHour}`}
+          value={parseInt(dashboard.occupancyRate, 10)}
+          valueSuffix="%"
+          subtitle={`${baySchedule?.bays.filter(b => b.status === 'active').length} active now · Peak at ${dashboard.peakHour}`}
           icon={TrendUpIcon}
           color="success"
           animated={true}
@@ -315,7 +371,8 @@ export default function Dashboard({ data, onNavigate }) {
         />
         <StatCard
           title="Revenue at Risk"
-          value={dashboard.revenueAtRisk}
+          value={revenueAtRisk}
+          valuePrefix="$"
           trend="Action Required"
           trendDirection="down"
           icon={WarningIcon}

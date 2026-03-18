@@ -243,10 +243,10 @@ export default function FNBView({ data, preselectedBay = null }) {
 
       {/* Stats */}
       <div className="fnb-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
-        <StatBlock label="Today's F&B Revenue" value={`$${fNBTodaysRevenue}`} icon={DollarIcon} color="#d4af37" />
+        <StatBlock label="Today's F&B Revenue" value={`$${fNBTodaysRevenue.toLocaleString()}`} icon={DollarIcon} color="#d4af37" />
         <StatBlock label="Active Orders" value={activeOrderCount} icon={ClockIcon} color="#f59e0b" />
         <StatBlock label="Completed Today" value={completedOrders.length} icon={CheckIcon} color="#22c55e" />
-        <StatBlock label="Avg Ticket" value={`$${avgTicket}`} icon={TrendUpIcon} color="#3b82f6" />
+        <StatBlock label="Avg Ticket" value={`$${avgTicket.toLocaleString()}`} icon={TrendUpIcon} color="#3b82f6" />
       </div>
 
       {/* Tab Navigation */}
@@ -321,7 +321,7 @@ export default function FNBView({ data, preselectedBay = null }) {
                     opacity: eightySiced.has(item.id) ? 0.5 : 1,
                   }}
                 >
-                  {item.name} <span style={{ opacity: 0.6 }}>${item.price}</span>
+                  {item.name} <span style={{ opacity: 0.6 }}>${item.price.toLocaleString()}</span>
                 </button>
               ))}
             </div>
@@ -399,12 +399,12 @@ export default function FNBView({ data, preselectedBay = null }) {
                       {order.items?.map((item, idx) => (
                         <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.5)', marginBottom: '0.125rem' }}>
                           <span>{item.qty}x {item.name}</span>
-                          <span className="mono">${item.price * item.qty}</span>
+                          <span className="mono">${(item.price * item.qty).toLocaleString()}</span>
                         </div>
                       )) || (
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.4)' }}>
                           <span>{order.itemCount} items</span>
-                          <span className="mono">${order.total}</span>
+                          <span className="mono">${order.total.toLocaleString()}</span>
                         </div>
                       )}
                     </div>
@@ -582,14 +582,14 @@ const OrderCard = ({ order, onStatusChange, onVoid }) => {
             <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: '#d4af37' }}>Bay {order.bayId}</span>
             <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.5)' }}>{order.customerName}</span>
           </div>
-          <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: '#d4af37', fontFamily: 'var(--font-mono)' }}>${order.total}</span>
+          <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: '#d4af37', fontFamily: 'var(--font-mono)' }}>${order.total.toLocaleString()}</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginBottom: '0.75rem' }}>
           {order.items.map((item, idx) => (
             <div key={idx}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.5)' }}>
                 <span>{item.qty}x {item.name}</span>
-                <span style={{ fontFamily: 'var(--font-mono)' }}>${item.price * item.qty}</span>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>${(item.price * item.qty).toLocaleString()}</span>
               </div>
               {item.note && <div style={{ fontSize: '9px', color: '#d4af37', fontStyle: 'italic', marginLeft: '1rem' }}>{item.note}</div>}
             </div>
@@ -653,7 +653,7 @@ const KitchenTicket = ({ order, onStatusChange, onVoid }) => {
           <div style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: config.color, animation: config.pulse ? 'pulse 2s ease-in-out infinite' : 'none' }} />
           <span style={{ fontSize: '9px', fontWeight: 700, color: config.color, textTransform: 'uppercase' }}>{config.label}</span>
         </div>
-        <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#d4af37' }}>${order.total}</span>
+        <span style={{ fontSize: 'var(--text-xs)', fontWeight: 700, color: '#d4af37' }}>${order.total.toLocaleString()}</span>
       </div>
     </div>
   );
@@ -667,7 +667,7 @@ const CompletedOrderRow = ({ order }) => (
     </div>
     <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
       <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.3)' }}>{order.time}</span>
-      <span style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#fff', fontFamily: 'var(--font-mono)' }}>${order.total}</span>
+      <span style={{ fontSize: 'var(--text-xs)', fontWeight: 600, color: '#fff', fontFamily: 'var(--font-mono)' }}>${order.total.toLocaleString()}</span>
     </div>
   </div>
 );
@@ -708,7 +708,7 @@ const MenuItemCard = ({ item, onAdd, onToggle86, inCart, is86d }) => (
     <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#fff', marginBottom: '0.125rem' }}>{item.name}</div>
     <div style={{ fontSize: '10px', color: 'rgba(255,255,255,0.35)', marginBottom: '0.5rem', lineHeight: 1.4 }}>{item.description}</div>
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: '#d4af37', fontFamily: 'var(--font-mono)' }}>${item.price}</span>
+      <span style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: '#d4af37', fontFamily: 'var(--font-mono)' }}>${item.price.toLocaleString()}</span>
       <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}><ClockIcon size={9} /> {item.prepTime}m</span>
     </div>
   </div>
@@ -740,7 +740,7 @@ const CartDrawer = ({ cart, cartTotal, cartCount, selectedBay, cartNotes, editin
               <span style={{ fontSize: 'var(--text-xs)', color: '#d4af37', fontWeight: 600, fontFamily: 'var(--font-mono)', minWidth: '14px', textAlign: 'center' }}>{item.qty}</span>
               <button onClick={() => onAdd(item, item.note)} style={cartBtnStyle}><PlusIcon size={10} /></button>
             </div>
-            <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)' }}>${item.price * item.qty}</span>
+            <span style={{ fontSize: 'var(--text-xs)', color: 'rgba(255,255,255,0.4)', fontFamily: 'var(--font-mono)' }}>${(item.price * item.qty).toLocaleString()}</span>
           </div>
           {item.note && <div style={{ fontSize: '9px', color: '#d4af37', fontStyle: 'italic' }}>"{item.note}"</div>}
           <button onClick={() => onEditNote(editingNote === item.id ? null : item.id)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.3)', cursor: 'pointer', fontSize: '9px', padding: 0, marginTop: '0.125rem' }}>

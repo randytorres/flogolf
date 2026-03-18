@@ -151,7 +151,7 @@ export default function Customer360({ data, selectedCustomerId }) {
             <h2 style={{
               fontFamily: 'var(--font-display)',
               fontSize: 'var(--text-2xl)',
-              color: 'var(--color-flomarine)',
+              color: '#fff',
               margin: '0 0 0.5rem 0',
             }}>
               {customer.name}
@@ -278,7 +278,7 @@ export default function Customer360({ data, selectedCustomerId }) {
               fontSize: 'var(--text-sm)',
               fontWeight: 500,
               color: customer.automationStatus?.includes('Active') ? '#fff' : 
-                     customer.automationStatus?.includes('Win-back') ? '#991b1b' : 'var(--color-flomarine)',
+                     customer.automationStatus?.includes('Win-back') ? '#fff' : '#fff',
               lineHeight: 1.5,
               padding: '0.75rem',
               backgroundColor: customer.automationStatus?.includes('Active') ? 'var(--color-success-light)' : 
@@ -375,7 +375,7 @@ function CustomerSelector({ customers, selectedId, onSelect }) {
           fontSize: 'var(--text-sm)',
         }}
       >
-        <span style={{ fontWeight: 600, color: 'var(--color-flomarine)' }}>
+        <span style={{ fontWeight: 600, color: '#fff' }}>
           {selected?.name || 'Select customer'}
         </span>
         <ChevronDown size={16} color="var(--color-text-muted)" style={{
@@ -438,7 +438,7 @@ function OverviewTab({ customer }) {
       {/* Stats Grid */}
       <div className="c360-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
         <MiniStat icon={Calendar} value={customer.visitsThisMonth} label="Visits this month" />
-        <MiniStat icon={DollarSign} value={`$${customer.avgSpendPerVisit}`} label="Avg spend/visit" />
+        <MiniStat icon={DollarSign} value={`${(customer.avgSpendPerVisit || 0).toLocaleString()}`} label="Avg spend/visit" />
         <MiniStat icon={Award} value={customer.handicap || 'N/A'} label="Handicap" />
       </div>
 
@@ -474,7 +474,7 @@ function OverviewTab({ customer }) {
             <div style={{
               fontWeight: 600,
               fontSize: 'var(--text-base)',
-              color: 'var(--color-flomarine)',
+              color: '#fff',
               marginBottom: '0.25rem',
             }}>
               {customer.nextBooking}
@@ -716,7 +716,7 @@ function JourneyTab({ customer }) {
           />
           <ValueBox
             label="Avg Order Value"
-            value={`$${customer.avgSpendPerVisit}`}
+            value={`${(customer.avgSpendPerVisit || 0).toLocaleString()}`}
             trend="+5%"
           />
           <ValueBox
@@ -771,7 +771,7 @@ function StatRow({ label, value, icon: Icon, highlight = false }) {
       <div style={{
         fontWeight: 600,
         fontSize: 'var(--text-sm)',
-        color: highlight ? 'var(--color-warning)' : 'var(--color-flomarine)',
+        color: highlight ? 'var(--color-warning)' : '#fff',
       }}>
         {value}
       </div>
@@ -782,11 +782,11 @@ function StatRow({ label, value, icon: Icon, highlight = false }) {
 function MiniStat({ icon: Icon, value, label }) {
   return (
     <Card variant="default" padding="md" style={{ textAlign: 'center' }}>
-      <Icon size={20} color="var(--color-flomarine)" style={{ marginBottom: '0.5rem' }} />
+      <Icon size={20} color="#d4af37" style={{ marginBottom: '0.5rem' }} />
       <div className="mono" style={{
         fontSize: 'var(--text-xl)',
         fontWeight: 600,
-        color: 'var(--color-flomarine)',
+        color: '#fff',
       }}>
         {value}
       </div>
@@ -821,7 +821,7 @@ function ValueBox({ label, value, trend, isPositive = false }) {
       <div className="mono" style={{
         fontSize: 'var(--text-2xl)',
         fontWeight: 600,
-        color: 'var(--color-flomarine)',
+        color: '#fff',
       }}>
         {value}
       </div>

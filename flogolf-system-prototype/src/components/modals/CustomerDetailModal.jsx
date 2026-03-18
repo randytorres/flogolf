@@ -90,7 +90,7 @@ export const CustomerDetailModal = ({
                 fontFamily: 'var(--font-display)',
                 fontSize: 'var(--text-2xl)',
                 fontWeight: 600,
-                color: 'var(--color-flomarine)',
+                color: '#fff',
                 margin: 0,
               }}>
                 {customer.name}
@@ -156,7 +156,7 @@ export const CustomerDetailModal = ({
           />
           <MiniStatCard 
             icon={DollarIcon} 
-            value={`$${customer.avgSpendPerVisit || 0}`} 
+            value={`$${(customer.avgSpendPerVisit || 0).toLocaleString()}`} 
             label="Avg spend/visit"
           />
           <MiniStatCard 
@@ -180,7 +180,7 @@ export const CustomerDetailModal = ({
               fontFamily: 'var(--font-display)',
               fontSize: 'var(--text-base)',
               fontWeight: 600,
-              color: 'var(--color-flomarine)',
+              color: '#fff',
               marginBottom: '0.75rem',
               display: 'flex',
               alignItems: 'center',
@@ -239,7 +239,7 @@ export const CustomerDetailModal = ({
           <div style={{
             fontSize: 'var(--text-sm)',
             fontWeight: 500,
-            color: 'var(--color-flomarine)',
+            color: '#fff',
           }}>
             {customer.automationStatus}
           </div>
@@ -257,7 +257,7 @@ export const CustomerDetailModal = ({
         }}>
           <SimBayIcon size={18} color={customer.golfzonApp ? '#22c55e' : '#3b82f6'} />
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: 'var(--color-flomarine)' }}>
+            <div style={{ fontSize: 'var(--text-sm)', fontWeight: 600, color: '#fff' }}>
               Golfzon Global App
             </div>
             <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
@@ -297,7 +297,7 @@ const QuickStat = ({ value, label, isWarning = false }) => (
     <div className="mono" style={{
       fontSize: 'var(--text-lg)',
       fontWeight: 600,
-      color: isWarning ? 'var(--color-warning)' : 'var(--color-flomarine)',
+      color: isWarning ? 'var(--color-warning)' : '#fff',
     }}>
       {value}
     </div>
@@ -321,7 +321,7 @@ const MiniStatCard = ({ icon: Icon, value, label, trend, isPositive }) => (
     <div className="mono" style={{
       fontSize: 'var(--text-xl)',
       fontWeight: 600,
-      color: isPositive === false ? 'var(--color-danger)' : 'var(--color-flomarine)',
+      color: isPositive === false ? 'var(--color-danger)' : '#fff',
       marginTop: '0.5rem',
     }}>
       {value}

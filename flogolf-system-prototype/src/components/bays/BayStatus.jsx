@@ -24,15 +24,10 @@ import {
   ActiveIcon,
 } from '../icons';
 
-// Generate a mock daily schedule for each bay
+// Full-day schedule for each bay — consistent with data.js baySchedule
 const generateDaySchedule = (bay) => {
-  const schedule = [];
-  const openHour = 8;
-  const closeHour = 22;
-  
-  // Known bookings from bay data
   const bookings = [];
-  
+
   if (bay.status === 'active' && bay.session) {
     bookings.push({
       start: bay.session.startTime,
@@ -45,7 +40,7 @@ const generateDaySchedule = (bay) => {
       phone: bay.customer?.phone,
     });
   }
-  
+
   if (bay.status === 'upcoming' && bay.session) {
     bookings.push({
       start: bay.session.startTime,
@@ -58,49 +53,47 @@ const generateDaySchedule = (bay) => {
       phone: bay.customer?.phone,
     });
   }
-  
-  // Add some historical and future bookings for realism
-  const bayId = bay.id;
-  if (bayId === 1) {
-    bookings.push({ start: '9:00 AM', end: '11:00 AM', customer: 'Walk-in', players: 2, type: 'Standard', amount: 90, status: 'completed', phone: null });
-    bookings.push({ start: '3:00 PM', end: '5:00 PM', customer: 'Tom Bradley', players: 1, type: 'Member Rate', amount: 75, status: 'upcoming', phone: '(781) 555-0201' });
-    bookings.push({ start: '6:00 PM', end: '8:00 PM', customer: 'Rachel Kim', players: 3, type: 'Peak Rate', amount: 195, status: 'upcoming', phone: '(617) 555-0389' });
-  } else if (bayId === 2) {
-    bookings.push({ start: '10:00 AM', end: '12:00 PM', customer: 'James Thorne', players: 1, type: 'Member Rate', amount: 45, status: 'completed', phone: '(781) 555-0155' });
-    bookings.push({ start: '2:00 PM', end: '3:00 PM', customer: 'David Chen', players: 1, type: 'Member Rate', amount: 55, status: 'upcoming', phone: '(617) 555-0311' });
-    bookings.push({ start: '4:00 PM', end: '6:00 PM', customer: 'Corporate - TechStart', players: 4, type: 'Corporate', amount: 150, status: 'upcoming', phone: '(617) 555-0400' });
-    bookings.push({ start: '7:00 PM', end: '9:00 PM', customer: 'Walk-in', players: 2, type: 'Standard', amount: 150, status: 'upcoming', phone: null });
-  } else if (bayId === 3) {
-    bookings.push({ start: '8:00 AM', end: '10:00 AM', customer: 'Lisa Wong', players: 1, type: 'Early Bird', amount: 45, status: 'completed', phone: '(617) 555-0267' });
-    bookings.push({ start: '10:30 AM', end: '12:30 PM', customer: 'Mark Stevens', players: 2, type: 'Early Bird', amount: 85, status: 'completed', phone: '(781) 555-0190' });
-    bookings.push({ start: '4:00 PM', end: '6:00 PM', customer: 'League - Eagles', players: 4, type: 'League', amount: 0, status: 'upcoming', phone: null });
-    bookings.push({ start: '7:00 PM', end: '9:00 PM', customer: 'Chris Martin', players: 2, type: 'Peak Rate', amount: 140, status: 'upcoming', phone: '(617) 555-0345' });
-  } else if (bayId === 4) {
-    bookings.push({ start: '9:00 AM', end: '11:00 AM', customer: 'PGA Lesson - Dave', players: 1, type: 'Lesson', amount: 0, status: 'completed', phone: null });
-    bookings.push({ start: '11:30 AM', end: '1:30 PM', customer: 'Anna Costa', players: 2, type: 'Off-Peak', amount: 100, status: 'completed', phone: '(781) 555-0222' });
-    bookings.push({ start: '3:00 PM', end: '5:00 PM', customer: 'Nina Patel', players: 3, type: 'Off-Peak', amount: 145, status: 'upcoming', phone: '(617) 555-0377' });
-  } else if (bayId === 5) {
-    bookings.push({ start: '10:00 AM', end: '12:00 PM', customer: 'Walk-in', players: 1, type: 'Early Bird', amount: 45, status: 'completed', phone: null });
-    bookings.push({ start: '1:00 PM', end: '3:00 PM', customer: 'Kevin Walsh', players: 2, type: 'Off-Peak', amount: 100, status: 'completed', phone: '(781) 555-0166' });
-  } else if (bayId === 6) {
-    bookings.push({ start: '8:00 AM', end: '10:00 AM', customer: 'Sarah Jenkins', players: 4, type: 'Early Bird', amount: 120, status: 'completed', phone: '(617) 555-0198' });
-    bookings.push({ start: '11:00 AM', end: '1:00 PM', customer: 'Mike OBrien', players: 1, type: 'Off-Peak', amount: 55, status: 'completed', phone: '(781) 555-0233' });
-    bookings.push({ start: '3:00 PM', end: '5:00 PM', customer: 'League - Hawks', players: 4, type: 'League', amount: 0, status: 'upcoming', phone: null });
-    bookings.push({ start: '6:00 PM', end: '8:00 PM', customer: 'Robert Diaz', players: 2, type: 'Peak Rate', amount: 140, status: 'upcoming', phone: '(617) 555-0411' });
-  }
-  
-  return bookings.sort((a, b) => {
-    const parseTime = (t) => {
-      const match = t.match(/(\d+):(\d+)\s*(AM|PM)/i);
-      if (!match) return 0;
-      let h = parseInt(match[1]);
-      const m = parseInt(match[2]);
-      if (match[3].toUpperCase() === 'PM' && h !== 12) h += 12;
-      if (match[3].toUpperCase() === 'AM' && h === 12) h = 0;
-      return h * 60 + m;
-    };
-    return parseTime(a.start) - parseTime(b.start);
-  });
+
+  // Historical and future bookings per bay — matches data.js schedule
+  const extras = {
+    1: [
+      { start: '8:30 AM', end: '10:30 AM', customer: 'Walk-in', players: 2, type: 'Early Bird', amount: 85, status: 'completed', phone: null },
+      { start: '3:00 PM', end: '5:00 PM', customer: 'Sandra Mitchell', players: 2, type: 'Off-Peak', amount: 100, status: 'upcoming', phone: '(617) 555-0356' },
+      { start: '6:00 PM', end: '8:00 PM', customer: 'James Thorne', players: 1, type: 'Peak Rate', amount: 75, status: 'upcoming', phone: '(781) 555-0155' },
+    ],
+    2: [
+      { start: '10:00 AM', end: '11:00 AM', customer: 'Walk-in', players: 1, type: 'Early Bird', amount: 45, status: 'completed', phone: null },
+      { start: '2:00 PM', end: '3:00 PM', customer: 'David Chen', players: 1, type: 'Member Rate', amount: 55, status: 'upcoming', phone: '(617) 555-0311' },
+      { start: '6:00 PM', end: '8:00 PM', customer: 'James Thorne', players: 1, type: 'Peak Rate', amount: 75, status: 'upcoming', phone: '(781) 555-0155' },
+      { start: '8:00 PM', end: '10:00 PM', customer: 'Walk-in', players: 2, type: 'Peak Rate', amount: 140, status: 'upcoming', phone: null },
+    ],
+    3: [
+      { start: '8:00 AM', end: '10:00 AM', customer: 'Walk-in', players: 2, type: 'Early Bird', amount: 85, status: 'completed', phone: null },
+      { start: '10:30 AM', end: '12:30 PM', customer: 'Lisa Wong', players: 1, type: 'Early Bird', amount: 45, status: 'completed', phone: '(617) 555-0267' },
+      { start: '3:00 PM', end: '5:00 PM', customer: 'League - Eagles', players: 4, type: 'League', amount: 0, status: 'upcoming', phone: null },
+      { start: '5:00 PM', end: '7:00 PM', customer: 'Robert Diaz', players: 2, type: 'Peak Rate', amount: 140, status: 'upcoming', phone: '(617) 555-0411' },
+    ],
+    4: [
+      { start: '8:30 AM', end: '10:30 AM', customer: 'Michael Sullivan', players: 1, type: 'Early Bird', amount: 45, status: 'completed', phone: '(781) 555-0142' },
+      { start: '1:15 PM', end: '2:45 PM', customer: 'Sandra Mitchell', players: 2, type: 'Off-Peak', amount: 77, status: 'upcoming', phone: '(617) 555-0356' },
+      { start: '3:00 PM', end: '5:00 PM', customer: 'Nina Patel', players: 3, type: 'Off-Peak', amount: 145, status: 'upcoming', phone: '(617) 555-0377' },
+      { start: '5:00 PM', end: '7:00 PM', customer: 'Amanda Foster', players: 4, type: 'Peak Rate', amount: 195, status: 'upcoming', phone: '(781) 555-0178' },
+    ],
+    5: [
+      { start: '10:00 AM', end: '11:00 AM', customer: 'Kevin Walsh', players: 2, type: 'Early Bird', amount: 85, status: 'completed', phone: '(781) 555-0166' },
+      { start: '12:30 PM', end: '2:00 PM', customer: 'Amanda Foster', players: 4, type: 'Off-Peak', amount: 77, status: 'completed', phone: '(781) 555-0178' },
+      { start: '3:00 PM', end: '5:00 PM', customer: 'League - Hawks', players: 4, type: 'League', amount: 0, status: 'upcoming', phone: null },
+      { start: '6:00 PM', end: '8:00 PM', customer: 'Michael Sullivan', players: 2, type: 'Peak Rate', amount: 140, status: 'upcoming', phone: '(781) 555-0142' },
+    ],
+    6: [
+      { start: '8:00 AM', end: '10:00 AM', customer: 'Guest (Walk-in)', players: 2, type: 'Early Bird', amount: 85, status: 'completed', phone: null },
+      { start: '2:00 PM', end: '4:00 PM', customer: 'Sarah Jenkins', players: 3, type: 'Off-Peak', amount: 95, status: 'upcoming', phone: '(617) 555-0198' },
+      { start: '6:00 PM', end: '8:00 PM', customer: 'Tom Bradley', players: 1, type: 'Peak Rate', amount: 64, status: 'upcoming', phone: '(781) 555-0201' },
+    ],
+  };
+
+  const bayBookings = [...bookings, ...(extras[bay.id] || [])];
+  return bayBookings.sort((a, b) => timeToMinutes(a.start) - timeToMinutes(b.start));
 };
 
 export const BayStatus = ({ baySchedule, onBookSlot, onSelectCustomer, onCallCustomer, onExtendSession, onEndSession, onOrderFB }) => {
@@ -175,7 +168,7 @@ export const BayStatus = ({ baySchedule, onBookSlot, onSelectCustomer, onCallCus
             </p>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
           <StatusPill count={occupied} label="Active" color="#22c55e" />
           <StatusPill count={upcoming} label="Upcoming" color="#f59e0b" />
           <StatusPill count={available} label="Open" color="#d4af37" />
@@ -270,8 +263,9 @@ const BayCard = ({ bay, currentTime, isExpanded, onToggle, onSelectCustomer, onC
       transition: 'all 0.2s ease',
     }}>
       {/* Compact Header Row */}
-      <div 
+      <div
         onClick={onToggle}
+        className="bay-card-header"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -306,7 +300,7 @@ const BayCard = ({ bay, currentTime, isExpanded, onToggle, onSelectCustomer, onC
 
         {/* Live Timer (active only) */}
         {isActive && bay.session && (
-          <div style={{
+          <div className="bay-card-meta" style={{
             minWidth: '95px',
             textAlign: 'center',
             padding: '0.25rem 0.5rem',
@@ -347,9 +341,9 @@ const BayCard = ({ bay, currentTime, isExpanded, onToggle, onSelectCustomer, onC
         </div>
 
         {/* Revenue + Utilization */}
-        <div style={{ textAlign: 'right', minWidth: '70px' }}>
+        <div className="bay-card-meta" style={{ textAlign: 'right', minWidth: '70px' }}>
           <div style={{ fontSize: 'var(--text-sm)', fontWeight: 700, color: '#d4af37', fontFamily: 'var(--font-mono)' }}>
-            ${todaysRevenue}
+            ${todaysRevenue.toLocaleString()}
           </div>
           <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.3)' }}>
             {utilizationPercent}% util
@@ -395,9 +389,9 @@ const BayCard = ({ bay, currentTime, isExpanded, onToggle, onSelectCustomer, onC
         }}>
           {/* Top Stats Row */}
           <div className="bay-mini-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem', marginBottom: '1rem' }}>
-            <MiniStat label="Today's Revenue" value={`$${todaysRevenue}`} color="#d4af37" />
-            <MiniStat label="Completed" value={`$${completedRevenue}`} color="#22c55e" />
-            <MiniStat label="Upcoming" value={`$${upcomingRevenue}`} color="#f59e0b" />
+            <MiniStat label="Today's Revenue" value={`$${todaysRevenue.toLocaleString()}`} color="#d4af37" />
+            <MiniStat label="Completed" value={`$${completedRevenue.toLocaleString()}`} color="#22c55e" />
+            <MiniStat label="Upcoming" value={`$${upcomingRevenue.toLocaleString()}`} color="#f59e0b" />
             <MiniStat label="Utilization" value={`${utilizationPercent}%`} color={utilizationPercent > 70 ? '#22c55e' : utilizationPercent > 40 ? '#f59e0b' : '#ef4444'} />
           </div>
 

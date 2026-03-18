@@ -911,7 +911,7 @@ function OverviewTab({ leagues, selectedLeague, onSelectLeague, registrations })
                 <InfoItem icon={FlagIcon} label="Format" value={league.format} />
                 <InfoItem icon={CalendarIcon} label="Starts" value={league.startDate} />
                 <InfoItem icon={ClockIcon} label="Duration" value={`${league.totalWeeks} weeks`} />
-                <InfoItem icon={DollarIcon} label="Entry" value={`$${league.entryFee}/person`} />
+                <InfoItem icon={DollarIcon} label="Entry" value={`$${league.entryFee.toLocaleString()}/person`} />
                 <InfoItem icon={SimBayIcon} label="Bays" value={`${baysNeeded} of ${TOTAL_BAYS}`} />
                 <InfoItem icon={UsersIcon} label="Teams" value={`${league.teams}/${league.maxTeams}`} />
               </div>
@@ -1394,7 +1394,7 @@ function RegistrationTab({ registrations, waitlist, searchQuery, onSearchChange,
                   </Badge>
                 </td>
                 <td style={styles.td}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>${reg.amount}</span>
+                  <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>${reg.amount.toLocaleString()}</span>
                 </td>
                 <td style={styles.td}>
                   <Badge variant={reg.memberType === 'Premium' ? 'primary' : 'outline'} size="sm">

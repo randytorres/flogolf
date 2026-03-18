@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ACTIVITY_MESSAGES } from '../data';
+import { useState, useEffect, useRef } from 'react';
+import { ACTIVITY_MESSAGES, MOCK_DATA } from '../data';
 
-// Activity types with icon keys (no emojis)
+// Activity types with icon keys
 const ACTIVITY_TYPES = {
   BOOKING: { iconKey: 'SimBay', label: 'Booking', color: 'var(--color-success)' },
   MEMBERSHIP: { iconKey: 'Star', label: 'Membership', color: 'var(--color-gold)' },
@@ -14,25 +14,30 @@ const ACTIVITY_TYPES = {
 export function useLiveActivity(maxItems = 5) {
   const [activities, setActivities] = useState([]);
   const [isPaused, setIsPaused] = useState(false);
+  const messageIndexRef = useRef(0);
 
   useEffect(() => {
-    // Initialize with some activities
-    const initial = ACTIVITY_MESSAGES.slice(0, 3).map((activity, index) => ({
+    // Initialize with the first few activities in chronological order
+    const initialCount = Math.min(3, ACTIVITY_MESSAGES.length);
+    const initial = ACTIVITY_MESSAGES.slice(0, initialCount).map((activity, index) => ({
       ...activity,
       id: `activity-${Date.now()}-${index}`,
-      timestamp: Date.now() - ((index + 1) * 3 * 60 * 1000),
-      formattedTime: formatTimeAgo((index + 1) * 3 * 60),
+      timestamp: Date.now() - ((initialCount - index) * 4 * 60 * 1000),
+      formattedTime: formatTimeAgo((initialCount - index) * 4 * 60),
     }));
     setActivities(initial);
+    messageIndexRef.current = initialCount;
 
-    // Simulate new activities coming in
+    // Simulate new activities coming in sequentially
     const interval = setInterval(() => {
       if (isPaused) return;
-      
-      const randomIndex = Math.floor(Math.random() * ACTIVITY_MESSAGES.length);
-      const randomActivity = ACTIVITY_MESSAGES[randomIndex];
+
+      const idx = messageIndexRef.current % ACTIVITY_MESSAGES.length;
+      const nextActivity = ACTIVITY_MESSAGES[idx];
+      messageIndexRef.current = idx + 1;
+
       const newActivity = {
-        ...randomActivity,
+        ...nextActivity,
         id: `activity-${Date.now()}`,
         timestamp: Date.now(),
         formattedTime: 'Just now',
@@ -43,7 +48,7 @@ export function useLiveActivity(maxItems = 5) {
         const updated = [newActivity, ...prev].slice(0, maxItems);
         return updated;
       });
-    }, 8000 + Math.random() * 4000);
+    }, 10000 + Math.random() * 5000);
 
     return () => clearInterval(interval);
   }, [maxItems, isPaused]);
@@ -51,7 +56,7 @@ export function useLiveActivity(maxItems = 5) {
   // Update relative times
   useEffect(() => {
     const interval = setInterval(() => {
-      setActivities(prev => 
+      setActivities(prev =>
         prev.map(activity => ({
           ...activity,
           formattedTime: formatTimeAgo(Date.now() - activity.timestamp),
@@ -63,8 +68,8 @@ export function useLiveActivity(maxItems = 5) {
     return () => clearInterval(interval);
   }, []);
 
-  return { 
-    activities, 
+  return {
+    activities,
     activityTypes: ACTIVITY_TYPES,
     isPaused,
     setIsPaused,
@@ -81,18 +86,23 @@ function formatTimeAgo(ms) {
 }
 
 export function useBayStatus() {
-  const [bays, setBays] = useState([
-    { id: 1, name: 'Bay 1', status: 'occupied', customer: 'Sandra M.', timeRemaining: 45, totalTime: 120 },
-    { id: 2, name: 'Bay 2', status: 'available', customer: null, timeRemaining: 0, totalTime: 0 },
-    { id: 3, name: 'Bay 3', status: 'occupied', customer: 'Patricia O.', timeRemaining: 35, totalTime: 120 },
-    { id: 4, name: 'Bay 4', status: 'upcoming', customer: 'Michael S.', timeRemaining: 0, totalTime: 0, startTime: '6:00 PM' },
-    { id: 5, name: 'Bay 5', status: 'upcoming', customer: 'Jennifer P.', timeRemaining: 0, totalTime: 0, startTime: '8:00 PM' },
-    { id: 6, name: 'Bay 6', status: 'available', customer: null, timeRemaining: 0, totalTime: 0 },
-  ]);
+  const saugusData = MOCK_DATA.Saugus;
+
+  const [bays, setBays] = useState(() =>
+    saugusData.baySchedule.bays.map(bay => ({
+      id: bay.id,
+      name: bay.name,
+      status: bay.status === 'active' ? 'occupied' : bay.status,
+      customer: bay.customer ? bay.customer.name.split(' ').map((w, i) => i === 0 ? w : w[0] + '.').join(' ') : null,
+      timeRemaining: bay.session?.timeRemaining || 0,
+      totalTime: bay.session?.duration || 0,
+      startTime: bay.session?.startTime || null,
+    }))
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setBays(prev => 
+      setBays(prev =>
         prev.map(bay => {
           if (bay.status === 'occupied' && bay.timeRemaining > 0) {
             const newTime = bay.timeRemaining - 1;
@@ -131,7 +141,7 @@ export function useOccupancySimulation() {
   useEffect(() => {
     const interval = setInterval(() => {
       setOccupancy(prev => {
-        const change = (Math.random() - 0.5) * 6;
+        const change = (Math.random() - 0.5) * 4;
         const newRate = Math.min(100, Math.max(0, prev.rate + change));
         return {
           rate: Math.round(newRate),

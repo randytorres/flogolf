@@ -13,7 +13,7 @@ export const Scorecard = ({ title, value, subtitle, trend, isPositive }) => (
     <span style={{ fontSize: '0.875rem', color: 'var(--color-charcoal-light)', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
       {title}
     </span>
-    <span className="text-display" style={{ fontSize: '2.5rem', color: 'var(--color-flomarine)', lineHeight: 1 }}>
+    <span className="text-display" style={{ fontSize: '2.5rem', color: '#fff', lineHeight: 1 }}>
       {value}
     </span>
     {(subtitle || trend) && (

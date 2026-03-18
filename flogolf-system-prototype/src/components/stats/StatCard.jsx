@@ -26,7 +26,7 @@ export const StatCard = ({
     ? parseInt(value.replace(/[^0-9]/g, ''), 10) || 0
     : value;
   
-  const { count } = useCountUp(animated ? numericValue : 0, 1500, false);
+  const { count } = useCountUp(animated ? numericValue : 0, 1500, true);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), animationDelay);
