@@ -1,7 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { StatCard, StatGrid } from '../components/stats';
-import { LiveActivityFeed } from '../components/activity';
-import { RevenueAtRisk } from '../components/revenue';
 import { BayStatus, BookingGrid } from '../components/bays';
 import { RevenueBreakdown } from '../components/revenue';
 import { Card, CardHeader, CardTitle, Button, Badge } from '../components/ui';
@@ -58,12 +56,6 @@ export default function Dashboard({ data, onNavigate }) {
       ? parseInt(data.dashboard.todayRevenue.replace(/[^0-9]/g, ''), 10)
       : data.dashboard.todayRevenue
   );
-  const [revenueAtRisk] = useState(
-    typeof data.dashboard.revenueAtRisk === 'string'
-      ? parseInt(data.dashboard.revenueAtRisk.replace(/[^0-9]/g, ''), 10)
-      : data.dashboard.revenueAtRisk
-  );
-
   const { dashboard, customers, leagueStandings, locationName } = data;
 
   // Compute hourly booking counts from bay schedule for BookingGrid
@@ -309,23 +301,9 @@ export default function Dashboard({ data, onNavigate }) {
         </div>
       </div>
 
-      {/* Top Row - Live Activity + Revenue at Risk */}
-      <div className="dash-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-        <LiveActivityFeed maxItems={5} externalActivities={activityQueue} />
-        <RevenueAtRisk 
-          amount={dashboard.revenueAtRisk}
-          breakdown={{
-            expiringMemberships: dashboard.expiringMemberships,
-            unpaidInvoices: 3,
-            atRiskCustomers: inFlowCustomers.length,
-          }}
-          onAction={() => {}}
-        />
-      </div>
-
       {/* Stats Grid */}
       <div className="dash-stat-grid">
-      <StatGrid columns={5}>
+      <StatGrid columns={4}>
         <StatCard
           title="Today's Bookings"
           value={todayBookings}
@@ -368,17 +346,6 @@ export default function Dashboard({ data, onNavigate }) {
           color="success"
           animated={true}
           animationDelay={300}
-        />
-        <StatCard
-          title="Revenue at Risk"
-          value={revenueAtRisk}
-          valuePrefix="$"
-          trend="Action Required"
-          trendDirection="down"
-          icon={WarningIcon}
-          color="danger"
-          animated={true}
-          animationDelay={400}
         />
       </StatGrid>
       </div>
@@ -650,11 +617,14 @@ function ActionCard({ customer, index, onClick }) {
         }}>
           <Icon size={16} color={config.color} />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{
             fontSize: 'var(--text-sm)',
             fontWeight: 600,
             color: '#fff',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}>
             {customer.name}
           </div>
@@ -662,6 +632,9 @@ function ActionCard({ customer, index, onClick }) {
             fontSize: 'var(--text-xs)',
             color: config.color,
             fontWeight: 500,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
           }}>
             {config.action}
           </div>
@@ -673,6 +646,11 @@ function ActionCard({ customer, index, onClick }) {
         color: 'rgba(255,255,255,0.4)',
         marginBottom: '1rem',
         lineHeight: 1.4,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
       }}>
         {customer.automationStatus}
       </div>

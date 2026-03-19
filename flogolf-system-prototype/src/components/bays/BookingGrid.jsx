@@ -238,8 +238,8 @@ export const BookingGrid = ({ baySchedule, hourlyBookings, onNewBooking }) => {
                       height: '28px',
                       backgroundColor: bgColor,
                       borderRadius: '3px',
-                      border: isHovered && !isActive && !isUpcoming && !isPast 
-                        ? '1.5px dashed var(--color-gold)' 
+                      border: isHovered && !isActive && !isUpcoming && !isPast
+                        ? '1.5px dashed var(--color-gold)'
                         : borderColor ? `1px solid ${borderColor}` : 'none',
                       display: 'flex',
                       alignItems: 'center',
@@ -247,6 +247,7 @@ export const BookingGrid = ({ baySchedule, hourlyBookings, onNewBooking }) => {
                       cursor: !isBooked && !isPast ? 'pointer' : 'default',
                       transition: 'all 0.15s ease',
                       position: 'relative',
+                      overflow: 'hidden',
                     }}
                   >
                     {isHovered && !isBooked && !isPast && (

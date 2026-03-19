@@ -345,7 +345,7 @@
   }
 
   .dash-stat-grid .stat-grid-responsive {
-    grid-template-columns: repeat(5, 1fr) !important;
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 
   .dash-action-grid {
@@ -375,11 +375,15 @@
   }
 
   .dash-stat-grid .stat-grid-responsive {
-    grid-template-columns: repeat(5, 1fr) !important;
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 
   .dash-action-grid {
     grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  .stat-grid-responsive .mono {
+    font-size: var(--text-4xl) !important;
   }
 }
 
@@ -660,11 +664,15 @@
   }
 
   .dash-stat-grid .stat-grid-responsive {
-    grid-template-columns: repeat(5, 1fr) !important;
+    grid-template-columns: repeat(4, 1fr) !important;
   }
 
   .dash-action-grid {
     grid-template-columns: repeat(4, 1fr) !important;
+  }
+
+  .stat-grid-responsive .mono {
+    font-size: var(--text-4xl) !important;
   }
 }
 

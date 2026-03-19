@@ -83,8 +83,10 @@ export const StatCard = ({
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
         transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) ${animationDelay}ms`,
+        height: '100%',
       }}
     >
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         {Icon && (
@@ -113,7 +115,7 @@ export const StatCard = ({
       </div>
 
       {/* Value */}
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem' }}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.75rem', flexWrap: 'wrap' }}>
         <span
           className="mono"
           style={{
@@ -160,6 +162,7 @@ export const StatCard = ({
           {subtitle}
         </p>
       )}
+      </div>
 
       {/* Sparkline */}
       {sparklineData && (
