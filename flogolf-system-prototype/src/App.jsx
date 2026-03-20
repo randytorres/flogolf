@@ -86,7 +86,7 @@ function App() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <img 
-                src="/flogolf/flogolf-logo.png" 
+                src="/flogolf-logo.png" 
                 alt="Flogolf Lounge" 
                 style={{ 
                   width: '44px', 
