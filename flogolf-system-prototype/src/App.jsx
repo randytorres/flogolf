@@ -35,7 +35,7 @@ const VIEWS = {
 
 function App() {
   const [activeView, setActiveView] = useState(VIEWS.DASHBOARD);
-  const [activeLocation, setActiveLocation] = useState('Saugus');
+  const [activeLocation, setActiveLocation] = useState('Demo');
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -67,7 +67,7 @@ function App() {
     }, 200);
   };
 
-  const currentData = MOCK_DATA[activeLocation] || MOCK_DATA['Saugus'];
+  const currentData = MOCK_DATA[activeLocation] || MOCK_DATA['Demo'];
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
@@ -86,8 +86,8 @@ function App() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <img 
-                src="/flogolf/flogolf-logo.png" 
-                alt="Flogolf Lounge" 
+                src="/flogolf-ops/flogolf-logo.png" 
+                alt="FloGolf" 
                 style={{ 
                   width: '44px', 
                   height: '44px', 
@@ -211,7 +211,7 @@ function App() {
               fontWeight: 600,
               fontSize: 'var(--text-sm)',
             }}>
-              FL
+              FG
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ 

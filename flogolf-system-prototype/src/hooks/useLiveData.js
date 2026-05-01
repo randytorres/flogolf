@@ -86,7 +86,7 @@ function formatTimeAgo(ms) {
 }
 
 export function useBayStatus() {
-  const saugusData = MOCK_DATA.Saugus;
+  const saugusData = MOCK_DATA.Demo;
 
   const [bays, setBays] = useState(() =>
     saugusData.baySchedule.bays.map(bay => ({

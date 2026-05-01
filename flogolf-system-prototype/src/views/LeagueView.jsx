@@ -19,8 +19,8 @@ import {
   SimBayIcon,
 } from '../components/icons';
 
-// ==================== FLOGOLF WINTER/SPRING 2026 LEAGUE DATA ====================
-// Based on actual flogolflounge.com/leagues
+// ==================== DEMO LEAGUE DATA ====================
+// Sample league data
 
 const SEASON = 'Winter Spring 2026';
 const SEASON_TAGLINE = 'Knock the Rust Off. Be Ready When the Season Starts.';
@@ -246,7 +246,7 @@ const REGISTRATIONS = [
 
 const WAITLIST = [
   { id: 101, name: 'Marcus Webb', email: 'marcus.w@email.com', phone: '(781) 555-2044', requestedLeague: 'Tue/Wed Evening (Late)', joinedDate: 'Feb 25', handicap: 11, notes: 'Prefers Tuesday' },
-  { id: 102, name: 'Andre Johnson', email: 'andre.j@email.com', phone: '(617) 555-2089', requestedLeague: 'Sunday League', joinedDate: 'Feb 26', handicap: 6, notes: 'New to Flogolf, heard from a friend' },
+  { id: 102, name: 'Andre Johnson', email: 'andre.j@email.com', phone: '(617) 555-2089', requestedLeague: 'Sunday League', joinedDate: 'Feb 26', handicap: 6, notes: 'New to venue, heard from a friend' },
   { id: 103, name: 'Pete Davidson', email: 'pete.d@email.com', phone: '(617) 555-2001', requestedLeague: 'Tue/Wed Evening (Early)', joinedDate: 'Feb 27', handicap: 8, notes: 'Has a partner ready' },
   { id: 104, name: 'Sarah Chen', email: 'sarah.c@email.com', phone: '(781) 555-2155', requestedLeague: 'Sunday Champ 50+', joinedDate: 'Feb 27', handicap: 12, notes: '52 years old, regular customer' },
 ];

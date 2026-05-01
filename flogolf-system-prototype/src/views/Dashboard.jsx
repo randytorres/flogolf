@@ -287,7 +287,7 @@ export default function Dashboard({ data, onNavigate }) {
           <div>
             <h1 className="section-title">Dashboard</h1>
             <p className="section-subtitle">
-              Operations overview for {locationName || 'Saugus'} location
+              Operations overview for {locationName || 'Main'} location
             </p>
           </div>
           <div style={{ display: 'flex', gap: '0.75rem' }}>

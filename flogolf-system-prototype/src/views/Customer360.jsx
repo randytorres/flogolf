@@ -252,7 +252,7 @@ export default function Customer360({ data, selectedCustomerId }) {
               }}>
                 <MapPin size={16} color="var(--color-text-muted)" />
                 <span style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-primary)' }}>
-                  Saugus
+                  Main Location
                 </span>
               </div>
             </div>

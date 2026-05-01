@@ -108,7 +108,7 @@ export const CustomerDetailModal = ({
             }}>
               <InfoItem icon={MailIcon} value={customer.email} />
               <InfoItem icon={PhoneIcon} value={customer.phone} />
-              <InfoItem icon={LocationIcon} value="Saugus" />
+              <InfoItem icon={LocationIcon} value="Main Location" />
             </div>
 
             {/* Tags */}

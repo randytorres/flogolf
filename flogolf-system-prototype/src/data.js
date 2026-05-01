@@ -1,5 +1,4 @@
-// Flogolf Lounge Operations Data
-// Based on flogolflounge.com business rules
+// FloGolf Demo Data
 
 const now = new Date();
 const today = now.toISOString().split('T')[0];
@@ -16,13 +15,13 @@ const daysFromNow = (n) => {
   return d.toISOString().split('T')[0];
 };
 
-// Flogolf Lounge Business Information
+// Business Information
 export const BUSINESS_INFO = {
-  name: 'Flogolf Lounge',
-  tagline: 'F.or L.ove O.f Golf',
-  address: '880 Broadway, Route 1 North, Saugus, MA 01906',
-  phone: '+1 (339) 231-7042',
-  email: 'Support@flogolflounge.com',
+  name: 'Sample Indoor Golf',
+  tagline: 'Your Venue Name Here',
+  address: '123 Main Street, Anytown, USA',
+  phone: '+1 (555) 123-4567',
+  email: 'hello@yourvenue.com',
   technology: 'Golfzon Simulators',
 
   rules: {
@@ -86,9 +85,9 @@ export const getPricingTier = (hour, isWeekend = false) => {
 };
 
 export const MOCK_DATA = {
-  Saugus: {
-    locationName: 'Saugus',
-    address: '880 Broadway, Route 1 North, Saugus, MA 01906',
+  Demo: {
+    locationName: 'Main Location',
+    address: '123 Main Street, Anytown, USA',
 
     dashboard: {
       todayBookings: 22,
@@ -580,8 +579,8 @@ export const MOCK_DATA = {
   },
 
   Burlington: {
-    locationName: 'Burlington',
-    address: '300 Mall Rd, Burlington, MA 01803',
+    locationName: 'Second Location',
+    address: '456 Oak Avenue, Anytown, USA',
 
     dashboard: {
       todayBookings: 12,
